@@ -39,7 +39,7 @@ public class ModeloController {
     public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
         try {
             this.modeloRepository.save(modelo);
-            return ResponseEntity.ok("Registro cadastrado com Sucesso");
+            return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
         catch(DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
@@ -54,7 +54,7 @@ public class ModeloController {
             throw new RuntimeException("Não foi possivel identificar o registro informado");
         }
             this.modeloRepository.save(modelo);
-            return ResponseEntity.ok("Registro atualizado com Sucesso");
+            return ResponseEntity.ok("Registro atualizado com sucesso");
         }
         catch(DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
