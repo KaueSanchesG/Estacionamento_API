@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/api/condutor")
 public class CondutorController {
@@ -26,6 +28,13 @@ public class CondutorController {
     }
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){ return ResponseEntity.ok(this.condutorRepository.findAll());}
+    @GetMapping("/ativo")
+    public ResponseEntity<List<Condutor>> findByAtivo() {
+        List<Condutor> condutores = condutorRepository.findByAtivo();
+        return ResponseEntity.ok(condutores);
+    }
+
+
 
     @PostMapping
     public  ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor) {
@@ -58,9 +67,7 @@ public class CondutorController {
     @DeleteMapping
     public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
         final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
-        if(condutorBanco.)
-        /*this.condutorRepository.delete(condutorBanco);*/
-
-        return ResponseEntity.ok("Flag desativada com sucesso");
+        this.condutorRepository.delete(condutorBanco);
+        return ResponseEntity.ok("Registro excluido com sucesso");
     }
 }
