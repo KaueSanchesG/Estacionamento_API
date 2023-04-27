@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
-@RequestMapping("/api/movimentacao")
+@RequestMapping(value = "/api/movimentacao")
 public class MovimentacaoController {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
@@ -55,5 +57,14 @@ public class MovimentacaoController {
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
-    /*@DeleteMapping*/
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletaAtivo(@PathVariable("id") Long id){
+        Optional<Movimentacao> opt = movimentacaoRepository.findById(id);
+        if(opt.isPresent()){
+            Movimentacao movimentacao = opt.get();
+            movimentacao.setAtivo(false);
+            movimentacaoRepository.save(movimentacao);
+            return ResponseEntity.ok("Flag desativada com sucesso");
+        }else { return ResponseEntity.badRequest().body("Não foi possivel desativar a flag");}
+        }
 }

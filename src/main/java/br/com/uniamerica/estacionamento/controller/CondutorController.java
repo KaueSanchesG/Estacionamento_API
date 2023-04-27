@@ -32,7 +32,8 @@ public class CondutorController {
         try {
             this.condutorRepository.save(condutor);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (DataIntegrityViolationException e) {
             return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
         }
     }
@@ -54,5 +55,12 @@ public class CondutorController {
             return ResponseEntity.internalServerError().body("Error" + e.getMessage());
         }
     }
-    /*@DeleteMapping*/
+    @DeleteMapping
+    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+        final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
+        if(condutorBanco.)
+        /*this.condutorRepository.delete(condutorBanco);*/
+
+        return ResponseEntity.ok("Flag desativada com sucesso");
+    }
 }

@@ -5,11 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 @Entity
+@Audited
 @Table(name = "tb_configuracao", schema = "estacionamento")
+@AuditTable(value = "tb_configuracao_audit", schema = "audit")
 public class Configuracao extends AbstractEntity{
     @Getter@Setter
     @Column(name = "valorHora")

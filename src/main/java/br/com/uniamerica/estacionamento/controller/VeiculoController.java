@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/veiculo")
+@RequestMapping(value = "/api/veiculo")
 public class VeiculoController {
     @Autowired
     private VeiculoRepository veiculoRepository;

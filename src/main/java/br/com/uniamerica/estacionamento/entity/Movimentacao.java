@@ -3,12 +3,16 @@ package br.com.uniamerica.estacionamento.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 @Entity
+@Audited
 @Table(name = "tb_movimentacoes", schema = "estacionamento")
+@AuditTable(value = "tb_movimentacao_audit", schema = "audit")
 public class Movimentacao extends AbstractEntity {
     @Getter@Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
