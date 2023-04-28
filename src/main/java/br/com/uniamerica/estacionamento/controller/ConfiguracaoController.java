@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.repository.ConfiguracaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/configuracao")
@@ -24,8 +27,6 @@ public class ConfiguracaoController {
         final Configuracao configuracao = this.configuracaoRepository.findById(id).orElse(null);
         return configuracao==null ? ResponseEntity.badRequest().body("Nenhum valor encontrado") : ResponseEntity.ok(configuracao);
     }
-    @GetMapping("/lista")
-    public ResponseEntity<?> listaCompleta(){return ResponseEntity.ok(this.configuracaoRepository.findAll());}
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Configuracao configuracao){

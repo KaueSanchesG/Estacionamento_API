@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
 import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/veiculo")
@@ -26,6 +29,11 @@ public class VeiculoController {
     }
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){return ResponseEntity.ok(this.veiculoRepository.findAll());}
+    @GetMapping("/ativo")
+    public ResponseEntity<?> findByAtivo() {
+        List<Veiculo> veiculos = veiculoRepository.findByAtivo();
+        return ResponseEntity.ok(veiculos);
+    }
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo){
@@ -55,5 +63,17 @@ public class VeiculoController {
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
-    /*@DeleteMapping*/
+    @DeleteMapping
+    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+        final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
+        try{
+            this.veiculoRepository.delete(veiculoBanco);
+            return ResponseEntity.ok("Registro deletado");
+        }
+        catch(DataIntegrityViolationException e){
+            veiculoBanco.setAtivo(false);
+            this.veiculoRepository.save(veiculoBanco);
+            return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
+        }
+    }
 }

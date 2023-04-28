@@ -29,12 +29,10 @@ public class CondutorController {
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){ return ResponseEntity.ok(this.condutorRepository.findAll());}
     @GetMapping("/ativo")
-    public ResponseEntity<List<Condutor>> findByAtivo() {
+    public ResponseEntity<?> findByAtivo() {
         List<Condutor> condutores = condutorRepository.findByAtivo();
         return ResponseEntity.ok(condutores);
     }
-
-
 
     @PostMapping
     public  ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor) {
@@ -67,7 +65,14 @@ public class CondutorController {
     @DeleteMapping
     public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
         final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
-        this.condutorRepository.delete(condutorBanco);
-        return ResponseEntity.ok("Registro excluido com sucesso");
+        try{
+            this.condutorRepository.delete(condutorBanco);
+            return ResponseEntity.ok("Registro deletado");
+        }
+        catch(DataIntegrityViolationException e){
+            condutorBanco.setAtivo(false);
+            this.condutorRepository.save(condutorBanco);
+            return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
+        }
     }
 }

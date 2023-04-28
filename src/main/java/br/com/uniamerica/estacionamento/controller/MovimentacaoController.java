@@ -4,11 +4,13 @@ import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+
 
 @Controller
 @RequestMapping(value = "/api/movimentacao")
@@ -27,7 +29,10 @@ public class MovimentacaoController {
         return movimentacao==null ? ResponseEntity.badRequest().body("Nenhum valor encontrado") :  ResponseEntity.ok(movimentacao);
     }
     @GetMapping("/lista")
-    public ResponseEntity<?> listaComleta(){return ResponseEntity.ok(this.movimentacaoRepository.findAll());}
+    public ResponseEntity<?> listaCompleta(){return ResponseEntity.ok(this.movimentacaoRepository.findAll());}
+    @GetMapping("/abertas")
+    public ResponseEntity<?> findByAbertas(){return ResponseEntity.ok(this.movimentacaoRepository.findByAbertas(LocalDateTime.now()));}
+
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Movimentacao movimentacao){
@@ -58,13 +63,13 @@ public class MovimentacaoController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletaAtivo(@PathVariable("id") Long id){
-        Optional<Movimentacao> opt = movimentacaoRepository.findById(id);
-        if(opt.isPresent()){
-            Movimentacao movimentacao = opt.get();
-            movimentacao.setAtivo(false);
-            movimentacaoRepository.save(movimentacao);
-            return ResponseEntity.ok("Flag desativada com sucesso");
-        }else { return ResponseEntity.badRequest().body("Não foi possivel desativar a flag");}
+    public ResponseEntity<?> deletaAtivo(@PathVariable("id") final Long id){
+        final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
+        if(movimentacao==null){
+            return ResponseEntity.badRequest().body("Não foi possivel desativar a flag");
+        }
+        movimentacao.setAtivo(false);
+        movimentacaoRepository.save(movimentacao);
+        return ResponseEntity.ok("Flag desativada com sucesso");
         }
 }

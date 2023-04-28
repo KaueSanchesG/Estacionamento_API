@@ -1,6 +1,8 @@
 package br.com.uniamerica.estacionamento.repository;
 
+import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Modelo;
+import org.springframework.boot.Banner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Repository
 public interface ModeloRepository extends JpaRepository<Modelo, Long> {
+    @Query("SELECT x FROM Modelo x WHERE x.ativo = true")
+    List<Modelo> findByAtivo();
 //    public List<Modelo> findByNome(final String nome);
 
 //    @Query("from Modelo where nome like :nome")
