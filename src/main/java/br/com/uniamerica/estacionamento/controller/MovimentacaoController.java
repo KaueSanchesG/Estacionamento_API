@@ -31,7 +31,7 @@ public class MovimentacaoController {
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){return ResponseEntity.ok(this.movimentacaoRepository.findAll());}
     @GetMapping("/abertas")
-    public ResponseEntity<?> findByAbertas(){return ResponseEntity.ok(this.movimentacaoRepository.findByAbertas(LocalDateTime.now()));}
+    public ResponseEntity<?> findByAberta(){return ResponseEntity.ok(this.movimentacaoRepository.findByAberta());}
 
 
     @PostMapping

@@ -11,7 +11,8 @@ import java.util.List;
 
 @Repository
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long> {
-    public List<Movimentacao> findByAbertas(@Param("saida") final LocalDateTime saida);
+    @Query("SELECT m FROM Movimentacao m WHERE m.saida IS NULL")
+    List<Movimentacao> findByAberta();
     @Query("SELECT x FROM Movimentacao x WHERE x.ativo = true")
     List<Movimentacao> findByAtivo();
 }
