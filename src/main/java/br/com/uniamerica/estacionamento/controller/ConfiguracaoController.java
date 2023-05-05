@@ -38,7 +38,7 @@ public class ConfiguracaoController {
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
         }
     }
-
+    
     @PutMapping
     public ResponseEntity<?> editar(@RequestParam("id") Long id, @RequestBody Configuracao configuracao){
         try {
