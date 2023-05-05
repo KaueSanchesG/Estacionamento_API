@@ -3,6 +3,7 @@ package br.com.uniamerica.estacionamento.controller;
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.repository.ConfiguracaoRepository;
+import br.com.uniamerica.estacionamento.service.ConfiguracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ConfiguracaoController {
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
+    @Autowired
+    private ConfiguracaoService configuracaoService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") Long id){
@@ -31,23 +34,18 @@ public class ConfiguracaoController {
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Configuracao configuracao){
         try {
-            this.configuracaoRepository.save(configuracao);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
+            this.configuracaoService.cadastraConfiguracao(configuracao);
         }
-        catch(DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+        catch(Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
         }
+        return ResponseEntity.ok("Registro cadastrado com sucesso");
     }
     
     @PutMapping
     public ResponseEntity<?> editar(@RequestParam("id") Long id, @RequestBody Configuracao configuracao){
         try {
-            final Configuracao configuracaoBanco = this.configuracaoRepository.findById(id).orElse(null);
-            if(configuracaoBanco==null || !configuracaoBanco.getId().equals(configuracao.getId())){
-                throw new RuntimeException("Não foi possivel identificar o registro informado");
-            }
-            this.configuracaoRepository.save(configuracao);
-            return ResponseEntity.ok("Registro atualizado com sucesso");
+            this.configuracaoService.atualizaConfiguracao(id, configuracao);
         }
         catch(DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
@@ -55,5 +53,6 @@ public class ConfiguracaoController {
         catch(RuntimeException e){
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
+        return ResponseEntity.ok("Registro atualizado com sucesso");
     }
 }

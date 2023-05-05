@@ -48,10 +48,6 @@ public class MovimentacaoController {
     @PutMapping
     public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try{
-            final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
-            if (movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
-                throw new RuntimeException("Não foi possivel identificar o registro informado");
-            }
             this.movimentacaoService.atuaizaMovimentacao(id, movimentacao);
         }
         catch(DataIntegrityViolationException e){

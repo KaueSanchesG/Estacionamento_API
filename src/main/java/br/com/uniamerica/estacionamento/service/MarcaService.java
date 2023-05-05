@@ -16,6 +16,9 @@ public class MarcaService {
         if("".equals(marca.getNome())){
             throw new RuntimeException("Marca não possui um nome (deve conter!)");
         }
+        if(marca.getNome().length() > 50){
+            throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
+        }
         this.marcaRepository.save(marca);
     }
 
@@ -27,6 +30,9 @@ public class MarcaService {
         }
         if("".equals(marca.getNome())){
             throw new RuntimeException("Marca não possui um nome (deve conter!)");
+        }
+        if(marca.getNome().length() > 50){
+            throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
         }
         this.marcaRepository.save(marca);
     }

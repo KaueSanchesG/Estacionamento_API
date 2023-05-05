@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @AuditTable(value = "tb_configuracao_audit", schema = "audit")
 public class Configuracao extends AbstractEntity{
     @Getter@Setter
-    @Column(name = "valorHora")
+    @Column(name = "valorHora", nullable = false)
     private BigDecimal valorHora;
     @Getter@Setter
     @Column(name = "valorMinutoMulta")
@@ -37,12 +37,12 @@ public class Configuracao extends AbstractEntity{
     @Column(name = "gerarDesconto")
     private boolean gerarDesconto;
     @Getter@Setter
-    @Column(name = "vagasMoto")
+    @Column(name = "vagasMoto", nullable = false)
     private int vagasMoto;
     @Getter@Setter
-    @Column(name = "vagasCarro")
+    @Column(name = "vagasCarro", nullable = false)
     private int vagasCarro;
     @Getter@Setter
-    @Column(name = "vagasVan")
+    @Column(name = "vagasVan", nullable = false)
     private int vagasVan;
 }
