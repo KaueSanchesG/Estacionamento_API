@@ -2,14 +2,12 @@ package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
+import br.com.uniamerica.estacionamento.service.MovimentacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 
 @Controller
@@ -17,6 +15,8 @@ import java.time.LocalDateTime;
 public class MovimentacaoController {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
+    @Autowired
+    private MovimentacaoService movimentacaoService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
@@ -37,12 +37,12 @@ public class MovimentacaoController {
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Movimentacao movimentacao){
         try{
-            this.movimentacaoRepository.save(movimentacao);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
+            this.movimentacaoService.cadastraMovimentacao(movimentacao);
         }
-        catch(DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+        catch(Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
         }
+        return ResponseEntity.ok("Registro cadastrado com sucesso");
     }
 
     @PutMapping
@@ -52,8 +52,7 @@ public class MovimentacaoController {
             if (movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
                 throw new RuntimeException("Não foi possivel identificar o registro informado");
             }
-            this.movimentacaoRepository.save(movimentacao);
-            return ResponseEntity.ok("Registro atualizado com sucesso");
+            this.movimentacaoService.atuaizaMovimentacao(id, movimentacao);
         }
         catch(DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
@@ -61,6 +60,7 @@ public class MovimentacaoController {
         catch(RuntimeException e){
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
+        return ResponseEntity.ok("Registro atualizado com sucesso");
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletaAtivo(@PathVariable("id") final Long id){
