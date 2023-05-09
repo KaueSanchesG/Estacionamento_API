@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.service;
 
+import br.com.uniamerica.estacionamento.config.ValidaTelefone;
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CondutorService {
     @Autowired
     private CondutorRepository condutorRepository;
+    @Autowired
+    private ValidaTelefone validaTelefone;
 
     @Transactional
     public void cadastraCondutor(Condutor condutor){
@@ -21,6 +24,9 @@ public class CondutorService {
         }
         if(condutor.getTelefone()==null || condutor.getTelefone().isEmpty()){
             throw new RuntimeException("Condutor não possui um telefone (deve conter!)");
+        }
+        if(!ValidaTelefone.validaTelefone(condutor.getTelefone())){
+            throw new RuntimeException("Telefone ínvalido");
         }
         if(condutor.getNome().length() > 100){
             throw new RuntimeException("Nome de condutor excedeu o limite (100 caracteres!)");

@@ -43,9 +43,7 @@ public class VeiculoService {
         if("".equals(veiculo.getModelo().getMarca().getNome())){
             throw new RuntimeException("A marca de modelo de veiculo não posui nome (deve conter!)");
         }
-        if("".equals(veiculo.getAno())){
-            throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
-        }
+
         this.veiculoRepository.save(veiculo);
     }
 }
