@@ -12,4 +12,5 @@ import java.util.List;
 public interface CondutorRepository extends JpaRepository<Condutor, Long> {
     @Query("SELECT c FROM Condutor c WHERE c.ativo = true")
     List<Condutor> findByAtivo();
+    Condutor findByCpf(String cpf);
 }

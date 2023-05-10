@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.repository;
 
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     @Query("SELECT x FROM Veiculo x WHERE x.ativo = true")
     List<Veiculo> findByAtivo();
+    Veiculo findByPlaca(String placa);
+
 }

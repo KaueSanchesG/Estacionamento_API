@@ -40,6 +40,9 @@ public class VeiculoService {
         if(veiculo.getTipo()==null){
             throw new RuntimeException("O veiculo não possui um tipo (deve conter!)");
         }
+        if(veiculoRepository.findByPlaca(veiculo.getPlaca())!=null){
+            throw new RuntimeException("A placa do veiculo ja existe");
+        }
         this.veiculoRepository.save(veiculo);
     }
 
@@ -72,6 +75,9 @@ public class VeiculoService {
         }
         if(veiculo.getModelo().getMarca().getNome().length()>50){
             throw new RuntimeException("O nome de marca de modelo de veiculo excedeu o limite (50 caracteres!)");
+        }
+        if(veiculoRepository.findByPlaca(veiculo.getPlaca())!=null){
+            throw new RuntimeException("A placa do veiculo ja existe");
         }
 
         this.veiculoRepository.save(veiculo);

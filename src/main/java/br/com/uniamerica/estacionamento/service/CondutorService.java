@@ -32,6 +32,9 @@ public class CondutorService {
         if(condutor.getNome().length() > 100){
             throw new RuntimeException("Nome de condutor excedeu o limite (100 caracteres!)");
         }
+        if(condutorRepository.findByCpf(condutor.getCpf())!=null){
+            throw new RuntimeException("O CPF já existe");
+        }
         this.condutorRepository.save(condutor);
     }
 
@@ -52,6 +55,9 @@ public class CondutorService {
         }
         if(condutor.getNome().length() > 100){
             throw new RuntimeException("Nome de condutor excedeu o limite (100 caracteres!)");
+        }
+        if(condutorRepository.findByCpf(condutor.getCpf())!=null){
+            throw new RuntimeException("O CPF já existe");
         }
         this.condutorRepository.save(condutor);
     }

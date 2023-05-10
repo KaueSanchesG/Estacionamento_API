@@ -19,13 +19,16 @@ public class MarcaService {
         if(marca.getNome().length() > 50){
             throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
         }
+        if(marcaRepository.findByNome(marca.getNome())!=null){
+            throw new RuntimeException("O nome já existe");
+        }
         this.marcaRepository.save(marca);
     }
 
     @Transactional
     public void atualizaMarca(final Long id, Marca marca){
         final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
-        if(marcaBanco==null || !marcaBanco.getId().equals(marca.getId())){
+        if(marcaBanco==null){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
         if("".equals(marca.getNome())){
@@ -33,6 +36,9 @@ public class MarcaService {
         }
         if(marca.getNome().length() > 50){
             throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
+        }
+        if(marcaRepository.findByNome(marca.getNome())!=null){
+            throw new RuntimeException("O nome já existe");
         }
         this.marcaRepository.save(marca);
     }
