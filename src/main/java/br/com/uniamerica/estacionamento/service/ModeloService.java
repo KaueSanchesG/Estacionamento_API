@@ -16,8 +16,14 @@ public class ModeloService {
         if("".equals(modelo.getMarca().getNome())){
             throw new RuntimeException("A marca de modelo não possui nome (deve conter!)");
         }
+        if(modelo.getMarca().getNome().length()>50){
+            throw new RuntimeException("O nome da marca de modelo excedeu o limite (50 caracteres!)");
+        }
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
+        }
+        if(modelo.getNome().length()>50){
+            throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
         }
         this.modeloRepository.save(modelo);
     }
@@ -36,6 +42,9 @@ public class ModeloService {
         }
         if(modelo.getNome().length()>50){
             throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
+        }
+        if(modelo.getMarca().getNome().length()>50){
+            throw new RuntimeException("O nome da marca de modelo excedeu o limite (50 caracteres!)");
         }
         this.modeloRepository.save(modelo);
     }

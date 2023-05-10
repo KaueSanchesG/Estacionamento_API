@@ -22,8 +22,23 @@ public class VeiculoService {
         if("".equals(veiculo.getModelo().getMarca().getNome())){
             throw new RuntimeException("A marca de modelo de veiculo não posui nome (deve conter!)");
         }
+        if(veiculo.getPlaca().length()>10){
+            throw new RuntimeException("A placa de viculo excedeu o limite (10 caracteres!)");
+        }
+        if(veiculo.getModelo().getNome().length()>50){
+            throw new RuntimeException("O nome de modelo de veiculo excedeu o limite (10 caracteres!)");
+        }
+        if(veiculo.getModelo().getMarca().getNome().length()>50){
+            throw new RuntimeException("O nome de marca de modelo de veiculo excedeu o limite (50 caracteres!)");
+        }
         if("".equals(veiculo.getAno())){
             throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
+        }
+        if(veiculo.getCor()==null){
+            throw new RuntimeException("O veiculo não possui uma cor (deve conter!)");
+        }
+        if(veiculo.getTipo()==null){
+            throw new RuntimeException("O veiculo não possui um tipo (deve conter!)");
         }
         this.veiculoRepository.save(veiculo);
     }
@@ -42,6 +57,21 @@ public class VeiculoService {
         }
         if("".equals(veiculo.getModelo().getMarca().getNome())){
             throw new RuntimeException("A marca de modelo de veiculo não posui nome (deve conter!)");
+        }
+        if(veiculo.getCor()==null){
+            throw new RuntimeException("O veiculo não possui uma cor (deve conter!)");
+        }
+        if(veiculo.getTipo()==null){
+            throw new RuntimeException("O veiculo não possui um tipo (deve conter!)");
+        }
+        if(veiculo.getPlaca().length()>10){
+            throw new RuntimeException("A placa de viculo excedeu o limite (10 caracteres!)");
+        }
+        if(veiculo.getModelo().getNome().length()>50){
+            throw new RuntimeException("O nome de modelo de veiculo excedeu o limite (10 caracteres!)");
+        }
+        if(veiculo.getModelo().getMarca().getNome().length()>50){
+            throw new RuntimeException("O nome de marca de modelo de veiculo excedeu o limite (50 caracteres!)");
         }
 
         this.veiculoRepository.save(veiculo);
