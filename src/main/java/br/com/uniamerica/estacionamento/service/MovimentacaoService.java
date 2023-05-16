@@ -67,8 +67,6 @@ public class MovimentacaoService {
             throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
         }
         if(movimentacao.getSaida() != null){
-            LocalDateTime entrada = movimentacao.getEntrada();
-            LocalDateTime saida = movimentacao.getSaida();
             LocalDateTime tempo = movimentacao.getSaida()
                     .minusHours(movimentacao.getEntrada().getHour())
                     .minusMinutes(movimentacao.getEntrada().getMinute())
