@@ -5,7 +5,6 @@ import br.com.uniamerica.estacionamento.config.ValidaTelefone;
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

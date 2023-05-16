@@ -8,6 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Service
 public class MovimentacaoService {
     @Autowired
@@ -61,6 +66,16 @@ public class MovimentacaoService {
         if(movimentacao.getVeiculo().getTipo()==null){
             throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
         }
+        if(movimentacao.getSaida() != null){
+            LocalDateTime entrada = movimentacao.getEntrada();
+            LocalDateTime saida = movimentacao.getSaida();
+            LocalDateTime tempo = movimentacao.getSaida()
+                    .minusHours(movimentacao.getEntrada().getHour())
+                    .minusMinutes(movimentacao.getEntrada().getMinute())
+                    .minusSeconds(movimentacao.getEntrada().getSecond())
+                    .minusNanos(movimentacao.getEntrada().getNano());
+            movimentacao.setTempo(tempo);
+        }
         this.movimentacaoRepository.save(movimentacao);
     }
 
@@ -108,6 +123,16 @@ public class MovimentacaoService {
         }
         if("".equals(movimentacao.getEntrada())){
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
+        }
+        if(movimentacao.getSaida() != null){
+            LocalDateTime entrada = movimentacao.getEntrada();
+            LocalDateTime saida = movimentacao.getSaida();
+            LocalDateTime tempo = movimentacao.getSaida()
+                    .minusHours(movimentacao.getEntrada().getHour())
+                    .minusMinutes(movimentacao.getEntrada().getMinute())
+                    .minusSeconds(movimentacao.getEntrada().getSecond())
+                    .minusNanos(movimentacao.getEntrada().getNano());
+            movimentacao.setTempo(tempo);
         }
         this.movimentacaoRepository.save(movimentacao);
     }
