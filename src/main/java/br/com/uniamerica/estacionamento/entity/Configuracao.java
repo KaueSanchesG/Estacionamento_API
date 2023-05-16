@@ -17,32 +17,32 @@ import java.time.LocalTime;
 public class Configuracao extends AbstractEntity{
     @Getter@Setter
     @Column(name = "valorHora", nullable = false)
-    private BigDecimal valorHora;
+    private BigDecimal valorHora;//2reais
     @Getter@Setter
     @Column(name = "valorMinutoMulta")
-    private BigDecimal valorMinutoMulta;
+    private BigDecimal valorMinutoMulta;//1real
     @Getter@Setter
     @Column(name = "inicioExpediente")
-    private LocalTime inicioExpediente;
+    private LocalTime inicioExpediente;//6am
     @Getter@Setter
     @Column(name = "fimExpediente")
-    private LocalTime fimExpediente;
+    private LocalTime fimExpediente;//8pm
     @Getter@Setter
     @Column(name = "tempoParaDesconto")
-    private LocalTime tempoParaDesconto;
+    private LocalTime tempoParaDesconto; //50hrs
     @Getter@Setter
     @Column(name = "tempoDeDesconto")
-    private LocalTime tempoDeDesconto;
+    private LocalTime tempoDeDesconto;//5hrs
     @Getter@Setter
     @Column(name = "gerarDesconto")
     private boolean gerarDesconto;
     @Getter@Setter
     @Column(name = "vagasMoto", nullable = false)
-    private int vagasMoto;
+    private int vagasMoto;//20
     @Getter@Setter
     @Column(name = "vagasCarro", nullable = false)
-    private int vagasCarro;
+    private int vagasCarro;//50
     @Getter@Setter
     @Column(name = "vagasVan", nullable = false)
-    private int vagasVan;
+    private int vagasVan;//5
 }
