@@ -25,7 +25,7 @@ public class MovimentacaoService {
     @Autowired
     private ValidaTelefone validaTelefone;
     @Autowired
-    private Configuracao configuracao;
+    private ConfiguracaoRepository configuracaoRepository;
 
     @Transactional
     public void cadastraMovimentacao(Movimentacao movimentacao){
@@ -78,8 +78,11 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
-        movimentacao.setValorTotal(valorTotal);
+        if(movimentacao.getTempo()!=null) {
+            movimentacao.setValorHora(configuracaoRepository.findValorHora());
+            BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+            movimentacao.setValorTotal(valorTotal);
+        }
 
         this.movimentacaoRepository.save(movimentacao);
     }
@@ -136,8 +139,12 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
-        movimentacao.setValorTotal(valorTotal);
+        if(movimentacao.getTempo()!=null) {
+            movimentacao.setValorHora(configuracaoRepository.findValorHora());
+            BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+            movimentacao.setValorTotal(valorTotal);
+        }
+
         this.movimentacaoRepository.save(movimentacao);
     }
 }
