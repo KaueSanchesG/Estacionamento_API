@@ -24,19 +24,22 @@ public class Movimentacao extends AbstractEntity {
     private Condutor condutor;
     @Getter@Setter
     @Column(name = "entrada", nullable = false)
-    private LocalDateTime entrada;
+    private LocalTime entrada;
     @Getter@Setter
     @Column(name = "saida")
-    private LocalDateTime saida;
+    private LocalTime saida;
     @Getter@Setter
     @Column(name = "tempo")
-    private LocalDateTime tempo;
+    private LocalTime tempo;
     @Getter@Setter
     @Column(name = "tempoDesconto")
     private LocalTime tempoDesconto;
     @Getter@Setter
     @Column(name = "tempoMulta")
     private LocalTime tempoMulta;
+    @Getter@Setter
+    @Column(name = "valorHora")
+    private BigDecimal valorHora;
     @Getter@Setter
     @Column(name = "valorDesconto")
     private BigDecimal valorDesconto;
@@ -46,7 +49,4 @@ public class Movimentacao extends AbstractEntity {
     @Getter@Setter
     @Column(name = "valorTotal")
     private BigDecimal valorTotal;
-    @Getter@Setter
-    @Column(name = "valorHora")
-    private BigDecimal valorHora;
 }

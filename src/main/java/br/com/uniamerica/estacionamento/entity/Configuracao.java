@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -14,13 +17,14 @@ import java.time.LocalTime;
 @Audited
 @Table(name = "tb_configuracao", schema = "estacionamento")
 @AuditTable(value = "tb_configuracao_audit", schema = "audit")
+@Component
 public class Configuracao extends AbstractEntity{
     @Getter@Setter
     @Column(name = "valorHora", nullable = false)
-    private BigDecimal valorHora;//2reais
+    private Double valorHora;//2reais
     @Getter@Setter
     @Column(name = "valorMinutoMulta")
-    private BigDecimal valorMinutoMulta;//1real
+    private Double valorMinutoMulta;//1real
     @Getter@Setter
     @Column(name = "inicioExpediente")
     private LocalTime inicioExpediente;//6am

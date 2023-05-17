@@ -2,12 +2,15 @@ package br.com.uniamerica.estacionamento.service;
 
 import br.com.uniamerica.estacionamento.config.ValidaCPF;
 import br.com.uniamerica.estacionamento.config.ValidaTelefone;
+import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
+import br.com.uniamerica.estacionamento.repository.ConfiguracaoRepository;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +24,8 @@ public class MovimentacaoService {
     private ValidaCPF validaCPF;
     @Autowired
     private ValidaTelefone validaTelefone;
+    @Autowired
+    private Configuracao configuracao;
 
     @Transactional
     public void cadastraMovimentacao(Movimentacao movimentacao){
@@ -67,12 +72,15 @@ public class MovimentacaoService {
             throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
         }
         if(movimentacao.getSaida() != null){
-            LocalDateTime tempo = movimentacao.getSaida()
+            LocalTime tempo = movimentacao.getSaida()
                     .minusHours(movimentacao.getEntrada().getHour())
                     .minusMinutes(movimentacao.getEntrada().getMinute())
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
+        BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+        movimentacao.setValorTotal(valorTotal);
+
         this.movimentacaoRepository.save(movimentacao);
     }
 
@@ -122,12 +130,14 @@ public class MovimentacaoService {
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
         }
         if(movimentacao.getSaida() != null){
-            LocalDateTime tempo = movimentacao.getSaida()
+            LocalTime tempo = movimentacao.getSaida()
                     .minusHours(movimentacao.getEntrada().getHour())
                     .minusMinutes(movimentacao.getEntrada().getMinute())
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
+        BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+        movimentacao.setValorTotal(valorTotal);
         this.movimentacaoRepository.save(movimentacao);
     }
 }
