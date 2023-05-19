@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+
 @Service
 public class ConfiguracaoService {
     @Autowired
@@ -19,6 +21,10 @@ public class ConfiguracaoService {
         if("".equals(configuracao.getValorHora())){
             throw new RuntimeException("ValorHora de configuração esta vazio (deve conter!)");
         }
+        /*if(configuracao.getInicioExpediente()!=null && configuracao.getFimExpediente()!=null){
+            configuracao.setInicioExpediente(LocalTime.of(6,0));
+            configuracao.setFimExpediente(LocalTime.of(20,0));
+        }*/
         this.configuracaoRepository.save(configuracao);
     }
 
