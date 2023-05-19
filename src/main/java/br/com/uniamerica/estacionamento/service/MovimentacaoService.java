@@ -79,22 +79,17 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        if (movimentacao.getEntrada() != null) {
-            BigDecimal multaTotal = BigDecimal.ZERO;
-            if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
-                Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
-                movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-                movimentacao.setTempoMulta(tempoMulta.toMinutes());
-                multaTotal = multaTotal.add(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
-            }
-            if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
-                Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
-                movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-                movimentacao.setTempoMulta(tempoMulta.toMinutes());
-                multaTotal = multaTotal.add(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
-            }
-            movimentacao.setValorMulta(multaTotal);
+        if (movimentacao.getEntrada()!=null && movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+            Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
+            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+            movimentacao.setTempoMulta(tempoMulta.toMinutes());
         }
+        if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
+            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+            movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
+        }
+            movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
         if(movimentacao.getTempo()!=null) {
             movimentacao.setValorHora(configuracaoRepository.findValorHora());
             BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
@@ -156,21 +151,15 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        if (movimentacao.getEntrada() != null) {
-            BigDecimal multaTotal = BigDecimal.ZERO;
-            if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
-                Duration tempoMulta = Duration.between(movimentacao.getEntrada(), configuracaoRepository.findInicioExpediente());
-                movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-                movimentacao.setTempoMulta(tempoMulta.toMinutes());
-                multaTotal = multaTotal.add(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
-            }
-            if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
-                Duration tempoMulta = Duration.between(configuracaoRepository.findFimExpediente(), movimentacao.getSaida());
-                movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-                movimentacao.setTempoMulta(tempoMulta.toMinutes());
-                multaTotal = multaTotal.add(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
-            }
-            movimentacao.setValorMulta(multaTotal);
+        if (movimentacao.getEntrada()!=null && movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+            Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
+            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+            movimentacao.setTempoMulta(tempoMulta.toMinutes());
+        }
+        if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
+            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+            movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
         }
 
         if(movimentacao.getTempo()!=null) {

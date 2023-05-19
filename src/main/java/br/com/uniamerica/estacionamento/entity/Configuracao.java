@@ -10,6 +10,7 @@ import org.hibernate.envers.Audited;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalTime;
 @Entity
 @Audited
@@ -30,10 +31,10 @@ public class Configuracao extends AbstractEntity{
     private LocalTime fimExpediente;//8pm
     @Getter@Setter
     @Column(name = "tempoParaDesconto")
-    private LocalTime tempoParaDesconto; //50hrs
+    private Duration tempoParaDesconto; //50hrs
     @Getter@Setter
     @Column(name = "tempoDeDesconto")
-    private LocalTime tempoDeDesconto;//5hrs
+    private Duration tempoDeDesconto;//5hrs
     @Getter@Setter
     @Column(name = "gerarDesconto")
     private boolean gerarDesconto;//false
