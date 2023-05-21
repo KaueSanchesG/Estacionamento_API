@@ -15,6 +15,9 @@ public class ConfiguracaoService {
 
     @Transactional
     public void cadastraConfiguracao(Configuracao configuracao){
+        if(configuracao.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
+        }
         if("".equals(configuracao.getVagasVan()) || "".equals(configuracao.getVagasCarro()) || "".equals(configuracao.getVagasMoto())){
             throw new RuntimeException("Vagas vazias detectadas (devem conter!)");
         }

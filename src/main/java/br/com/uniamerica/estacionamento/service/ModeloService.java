@@ -13,17 +13,14 @@ public class ModeloService {
 
     @Transactional
     public void cadastraModelo(Modelo modelo){
-        if("".equals(modelo.getMarca().getNome())){
-            throw new RuntimeException("A marca de modelo não possui nome (deve conter!)");
-        }
-        if(modelo.getMarca().getNome().length()>50){
-            throw new RuntimeException("O nome da marca de modelo excedeu o limite (50 caracteres!)");
+        if(modelo.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
         }
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
-        if(modelo.getNome().length()>50){
-            throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
+        if(modelo.getNome().length()>5 || modelo.getNome().length()>50){
+            throw new RuntimeException("Nome de modelo excedeu o limite (entre 5 á 50 caracteres!)");
         }
         if(modeloRepository.findByNome(modelo.getNome())!=null){
             throw new RuntimeException("O nome ja existe");
@@ -37,17 +34,14 @@ public class ModeloService {
         if(modeloBanco==null || !modeloBanco.getId().equals(modelo.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
-        if("".equals(modelo.getMarca().getNome())){
-            throw new RuntimeException("A marca de modelo não possui nome (deve conter!)");
+        if(modelo.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
         }
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
-        if(modelo.getNome().length()>50){
-            throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
-        }
-        if(modelo.getMarca().getNome().length()>50){
-            throw new RuntimeException("O nome da marca de modelo excedeu o limite (50 caracteres!)");
+        if(modelo.getNome().length()>5 || modelo.getNome().length()>50){
+            throw new RuntimeException("Nome de modelo excedeu o limite (entre 5 á 50 caracteres!)");
         }
         if(modeloRepository.findByNome(modelo.getNome())!=null){
             throw new RuntimeException("O nome ja existe");

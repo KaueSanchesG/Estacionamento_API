@@ -1,6 +1,7 @@
 package br.com.uniamerica.estacionamento.service;
 
 import br.com.uniamerica.estacionamento.config.ValidaCPF;
+import br.com.uniamerica.estacionamento.config.ValidaPlaca;
 import br.com.uniamerica.estacionamento.config.ValidaTelefone;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
@@ -26,51 +27,16 @@ public class MovimentacaoService {
     private ValidaTelefone validaTelefone;
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
-
+    @Autowired
+    private ValidaPlaca validaPlaca;
 
     @Transactional
     public void cadastraMovimentacao(Movimentacao movimentacao){
-        if(movimentacao.getVeiculo().getPlaca()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui placa (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getPlaca().length()>10){
-            throw new RuntimeException("A placa do veiculo da movimentação excedeu o limite (10 caracteres!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getNome()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui nome de modelo (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getNome().length()>50){
-            throw new RuntimeException("O nome de modelo de veiculo de movimentação excedeu o limite (50 caracteres!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getMarca().getNome()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui nome de marca em modelo (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getMarca().getNome().length()>50){
-            throw new RuntimeException("O nome de marca de modelo de veiculo de movimentação excedeu o limite (50 caracteres!)");
-        }
-        if("".equals(movimentacao.getVeiculo().getAno())){
-            throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
-        }
-        if("".equals(movimentacao.getCondutor().getNome())){
-            throw new RuntimeException("O condutor da movimentação não possui um nome (deve conter!)");
-        }
-        if(movimentacao.getCondutor().getNome().length()>100){
-            throw new RuntimeException("O nome de condutor de movimentação excedeu o limite (100 caracteres!");
-        }
-        if(this.validaCPF.isCPF(movimentacao.getCondutor().getCpf()) == false){
-            throw new RuntimeException("O cpf está invalido");
-        }
-        if(this.validaTelefone.validaTelefone(movimentacao.getCondutor().getTelefone()) == false){
-            throw new RuntimeException("O telefone está invalido");
+        if(movimentacao.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
         }
         if("".equals(movimentacao.getEntrada())){
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getCor()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getTipo()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
         }
         if(movimentacao.getSaida() != null){
             LocalTime tempo = movimentacao.getSaida()
@@ -89,7 +55,9 @@ public class MovimentacaoService {
             movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
             movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
         }
+        if(movimentacao.getTempoMulta()!=null){
             movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
+        }
         if(movimentacao.getTempo()!=null) {
             movimentacao.setValorHora(configuracaoRepository.findValorHora());
             BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
@@ -105,41 +73,14 @@ public class MovimentacaoService {
         if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
-        if(movimentacao.getVeiculo().getPlaca()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui placa (deve conter!)");
+        if(movimentacao.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
         }
-        if(movimentacao.getVeiculo().getModelo().getNome()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui nome de modelo (deve conter!)");
+        if(movimentacao.getVeiculo()==null){
+            throw new RuntimeException("O id de veiculo está incorreto");
         }
-        if(movimentacao.getVeiculo().getModelo().getMarca().getNome()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui nome de marca em modelo (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getAno() == 0){
-            throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getPlaca().length()>10){
-            throw new RuntimeException("A placa do veiculo da movimentação excedeu o limite (10 caracteres!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getNome().length()>50){
-            throw new RuntimeException("O nome de modelo de veiculo de movimentação excedeu o limite (50 caracteres!)");
-        }
-        if(movimentacao.getVeiculo().getModelo().getMarca().getNome().length()>50){
-            throw new RuntimeException("O nome de marca de modelo de veiculo de movimentação excedeu o limite (50 caracteres!)");
-        }
-        if(movimentacao.getCondutor().getNome().length()>100){
-            throw new RuntimeException("O nome de condutor de movimentação excedeu o limite (100 caracteres!");
-        }
-        if(this.validaCPF.isCPF(movimentacao.getCondutor().getCpf()) == false){
-            throw new RuntimeException("O cpf está invalido");
-        }
-        if(this.validaTelefone.validaTelefone(movimentacao.getCondutor().getTelefone()) == false){
-            throw new RuntimeException("O telefone está invalido");
-        }
-        if(movimentacao.getVeiculo().getCor()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui uma cor (deve conter!)");
-        }
-        if(movimentacao.getVeiculo().getTipo()==null){
-            throw new RuntimeException("O veiculo da movimentação não possui um tipo (deve conter!)");
+        if(movimentacao.getCondutor()==null){
+            throw new RuntimeException("O id de condutor está incoreto");
         }
         if("".equals(movimentacao.getEntrada())){
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
@@ -161,10 +102,12 @@ public class MovimentacaoService {
             movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
             movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
         }
-
+        if(movimentacao.getTempoMulta()!=null){
+            movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
+        }
         if(movimentacao.getTempo()!=null) {
             movimentacao.setValorHora(configuracaoRepository.findValorHora());
-            BigDecimal valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+            BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
             movimentacao.setValorTotal(valorTotal);
         }
 

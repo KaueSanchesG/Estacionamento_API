@@ -13,11 +13,14 @@ public class MarcaService {
 
     @Transactional
     public void cadastraMarca(Marca marca){
+        if(marca.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
+        }
         if("".equals(marca.getNome())){
             throw new RuntimeException("Marca não possui um nome (deve conter!)");
         }
-        if(marca.getNome().length() > 50){
-            throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
+        if(marca.getNome().length()<3 || marca.getNome().length() > 50){
+            throw new RuntimeException("Nome da marca está incorreto (de 3 a 50 caracteres!)");
         }
         if(marcaRepository.findByNome(marca.getNome())!=null){
             throw new RuntimeException("O nome já existe");
@@ -34,8 +37,8 @@ public class MarcaService {
         if("".equals(marca.getNome())){
             throw new RuntimeException("Marca não possui um nome (deve conter!)");
         }
-        if(marca.getNome().length() > 50){
-            throw new RuntimeException("Nome da marca excedeu o limite (50 caracteres!)");
+        if(marca.getNome().length()<3 || marca.getNome().length() > 50){
+            throw new RuntimeException("Nome da marca está incorreto (de 3 a 50 caracteres!)");
         }
         if(marcaRepository.findByNome(marca.getNome())!=null){
             throw new RuntimeException("O nome já existe");

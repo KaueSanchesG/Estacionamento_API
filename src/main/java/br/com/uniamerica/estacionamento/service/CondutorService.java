@@ -19,6 +19,9 @@ public class CondutorService {
 
     @Transactional
     public void cadastraCondutor(Condutor condutor){
+        if(condutor.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
+        }
         if(condutor.getNome()==null){
             throw new RuntimeException("Condutor não possui um nome (deve conter!)");
         }
@@ -28,8 +31,8 @@ public class CondutorService {
         if (this.validaCPF.isCPF(condutor.getCpf()) == false) {
             throw new RuntimeException("Cpf de condutor está incorreto");
         }
-        if(condutor.getNome().length() > 100){
-            throw new RuntimeException("Nome de condutor excedeu o limite (100 caracteres!)");
+        if(condutor.getNome().length()<3 || condutor.getNome().length() > 100){
+            throw new RuntimeException("Nome de condutor está errado (de 3 a 100 caracteres!)");
         }
         if(condutorRepository.findByCpf(condutor.getCpf())!=null){
             throw new RuntimeException("O CPF já existe");
@@ -43,6 +46,9 @@ public class CondutorService {
         if(condutorBanco==null || !condutorBanco.getId().equals(condutor.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
+        if(condutor.getId()!=null){
+            throw new RuntimeException("O id deve ser gerado pelo banco");
+        }
         if(condutor.getNome()==null){
             throw new RuntimeException("Condutor não possui um nome (deve conter!)");
         }
@@ -52,8 +58,8 @@ public class CondutorService {
         if (this.validaCPF.isCPF(condutor.getCpf()) == false) {
             throw new RuntimeException("Cpf de condutor está incorreto");
         }
-        if(condutor.getNome().length() > 100){
-            throw new RuntimeException("Nome de condutor excedeu o limite (100 caracteres!)");
+        if(condutor.getNome().length()<3 || condutor.getNome().length() > 100){
+            throw new RuntimeException("Nome de condutor está errado (de 3 a 100 caracteres!)");
         }
         if(condutorRepository.findByCpf(condutor.getCpf())!=null){
             throw new RuntimeException("O CPF já existe");

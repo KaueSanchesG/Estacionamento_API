@@ -31,10 +31,10 @@ public class Configuracao extends AbstractEntity{
     private LocalTime fimExpediente;//8pm
     @Getter@Setter
     @Column(name = "tempoParaDesconto")
-    private Duration tempoParaDesconto; //50hrs
+    private Long tempoParaDesconto; //50hrs
     @Getter@Setter
     @Column(name = "tempoDeDesconto")
-    private Duration tempoDeDesconto;//5hrs
+    private Long tempoDeDesconto;//5hrs
     @Getter@Setter
     @Column(name = "gerarDesconto")
     private boolean gerarDesconto;//false
