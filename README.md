@@ -7,7 +7,7 @@ O projeto consiste em um sistema de estacionamento que permite cadastrar e atual
 
 ## Funcionalidades
 
-### Cadastrar veículo
+### Cadastrar Movimentação
 
 A classe `MovimentacaoService` contém o método `cadastraMovimentacao` que permite cadastrar um novo veículo no sistema de estacionamento. Antes de salvar o veículo, são realizadas as seguintes validações:
 
@@ -20,7 +20,7 @@ A classe `MovimentacaoService` contém o método `cadastraMovimentacao` que perm
 - Gera multas se ouver um tempoMulta
 - Gera um valor total baseado na somatoria e diminuição de descontos
 
-### Atualizar veículo
+### Atualizar Movimentação
 
 A classe `VeiculoService` também possui o método `atualizaVeiculo` que permite atualizar as informações de um veículo existente. Antes de realizar a atualização, são feitas as seguintes verificações:
 
