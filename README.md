@@ -16,8 +16,8 @@ A classe `MovimentacaoService` contém o método `cadastraMovimentacao` que perm
 - Verifica se existe um id de condutor
 - Verifica se existe uma entrada
 - Verifica se existe uma saida
-- Verifica se ouve entrada e saida depois ou antes do expediente
-- Gera multas se ouver um tempoMulta
+- Verifica se houve entrada e saida depois ou antes do expediente
+- Gera multas se houver um tempoMulta
 - Gera um valor total baseado na somatoria e diminuição de descontos
 
 ### Atualizar Movimentação
@@ -29,8 +29,8 @@ A classe `VeiculoService` também possui o método `atualizaVeiculo` que permite
 - Verifica se existe um id de condutor
 - Verifica se existe uma entrada
 - Verifica se existe uma saida
-- Verifica se ouve entrada e saida depois ou antes do expediente
-- Gera multas se ouver um tempoMulta
+- Verifica se houve entrada e saida depois ou antes do expediente
+- Gera multas se houver um tempoMulta
 - Gera um valor total baseado na somatoria e diminuição de descontos
 
 ### Iniciar a aplicação
