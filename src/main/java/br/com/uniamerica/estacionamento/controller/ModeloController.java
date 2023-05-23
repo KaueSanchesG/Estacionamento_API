@@ -72,16 +72,16 @@ public class ModeloController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+    public ResponseEntity <?> deletar(@RequestParam("id") final Long id){
         final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
         try{
             this.modeloRepository.delete(modeloBanco);
-            return ResponseEntity.ok("Registro deletado");
         }
-        catch(DataIntegrityViolationException e){
+        catch(RuntimeException e){
             modeloBanco.setAtivo(false);
             this.modeloRepository.save(modeloBanco);
-            return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
         }
+        return ResponseEntity.ok("Registro deletado");
     }
 }

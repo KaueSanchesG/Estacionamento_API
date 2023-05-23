@@ -24,11 +24,7 @@ public class MovimentacaoService {
     @Autowired
     private ValidaCPF validaCPF;
     @Autowired
-    private ValidaTelefone validaTelefone;
-    @Autowired
     private ConfiguracaoRepository configuracaoRepository;
-    @Autowired
-    private ValidaPlaca validaPlaca;
 
     @Transactional
     public void cadastraMovimentacao(Movimentacao movimentacao){
@@ -45,15 +41,15 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        if (movimentacao.getEntrada()!=null && movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+        if(movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())){
             Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
             movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
             movimentacao.setTempoMulta(tempoMulta.toMinutes());
         }
-        if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+        if(movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())){
             Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
             movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-            movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
+            movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
         }
         if(movimentacao.getTempoMulta()!=null){
             movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
@@ -72,9 +68,6 @@ public class MovimentacaoService {
         final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
         if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
-        }
-        if(movimentacao.getId()!=null){
-            throw new RuntimeException("O id deve ser gerado pelo banco");
         }
         if(movimentacao.getVeiculo()==null){
             throw new RuntimeException("O id de veiculo está incorreto");

@@ -63,16 +63,19 @@ public class VeiculoController {
         return ResponseEntity.ok("Registro atualizado com sucesso");
     }
     @DeleteMapping
-    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+    public ResponseEntity <?> deletar(@RequestParam("id") final Long id){
         final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
         try{
             this.veiculoRepository.delete(veiculoBanco);
-            return ResponseEntity.ok("Registro deletado");
         }
-        catch(DataIntegrityViolationException e){
-            veiculoBanco.setAtivo(false);
-            this.veiculoRepository.save(veiculoBanco);
-            return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
+        catch(RuntimeException e){
+            if(veiculoBanco.isAtivo()) {
+                veiculoBanco.setAtivo(false);
+                this.veiculoRepository.save(veiculoBanco);
+                return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            }
+            return ResponseEntity.internalServerError().body("Erro no delete, a flag ja está desativada");
         }
+        return ResponseEntity.ok("Registro deletado");
     }
 }

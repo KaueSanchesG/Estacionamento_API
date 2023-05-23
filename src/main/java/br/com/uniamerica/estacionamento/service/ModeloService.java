@@ -34,13 +34,10 @@ public class ModeloService {
         if(modeloBanco==null || !modeloBanco.getId().equals(modelo.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
-        if(modelo.getId()!=null){
-            throw new RuntimeException("O id deve ser gerado pelo banco");
-        }
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
-        if(modelo.getNome().length()>5 || modelo.getNome().length()>50){
+        if(modelo.getNome().length()<5 || modelo.getNome().length()>50){
             throw new RuntimeException("Nome de modelo excedeu o limite (entre 5 á 50 caracteres!)");
         }
         if(modeloRepository.findByNome(modelo.getNome())!=null){

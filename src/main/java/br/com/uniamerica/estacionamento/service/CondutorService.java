@@ -46,9 +46,6 @@ public class CondutorService {
         if(condutorBanco==null || !condutorBanco.getId().equals(condutor.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
-        if(condutor.getId()!=null){
-            throw new RuntimeException("O id deve ser gerado pelo banco");
-        }
         if(condutor.getNome()==null){
             throw new RuntimeException("Condutor não possui um nome (deve conter!)");
         }

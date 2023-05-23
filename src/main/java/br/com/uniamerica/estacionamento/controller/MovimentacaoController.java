@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 
 @Controller
 @RequestMapping(value = "/api/movimentacao")
@@ -30,7 +32,7 @@ public class MovimentacaoController {
     }
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){return ResponseEntity.ok(this.movimentacaoRepository.findAll());}
-    @GetMapping("/abertas")
+    @GetMapping("/aberta")
     public ResponseEntity<?> findByAberta(){return ResponseEntity.ok(this.movimentacaoRepository.findByAberta());}
 
 
@@ -58,14 +60,11 @@ public class MovimentacaoController {
         }
         return ResponseEntity.ok("Registro atualizado com sucesso");
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletaAtivo(@PathVariable("id") final Long id){
-        final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
-        if(movimentacao==null){
-            return ResponseEntity.badRequest().body("Não foi possivel desativar a flag");
-        }
-        movimentacao.setAtivo(false);
-        movimentacaoRepository.save(movimentacao);
-        return ResponseEntity.ok("Flag desativada com sucesso");
-        }
+    @DeleteMapping
+    public ResponseEntity <?> deletar(@RequestParam("id") final Long id){
+        final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
+        movimentacaoBanco.setAtivo(false);
+        this.movimentacaoRepository.save(movimentacaoBanco);
+        return ResponseEntity.ok("Registro desativado");
+    }
 }

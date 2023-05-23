@@ -62,16 +62,16 @@ public class MarcaController {
         return ResponseEntity.ok("Registro atualizado com sucesso");
     }
     @DeleteMapping
-    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+    public ResponseEntity <?> deletar(@RequestParam("id") final Long id){
         final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
         try{
             this.marcaRepository.delete(marcaBanco);
-            return ResponseEntity.ok("Registro deletado");
         }
-        catch(DataIntegrityViolationException e){
+        catch(RuntimeException e){
             marcaBanco.setAtivo(false);
             this.marcaRepository.save(marcaBanco);
-            return ResponseEntity.internalServerError().body("Erro " + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
         }
+        return ResponseEntity.ok("Registro deletado");
     }
 }

@@ -42,14 +42,14 @@ public class VeiculoService {
         if(veiculoBanco==null || !veiculoBanco.getId().equals(veiculo.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
         }
-        if(veiculo.getId()!=null){
-            throw new RuntimeException("O id deve ser gerado pelo banco");
-        }
         if(validaPlaca.validarPlaca(veiculo.getPlaca())!=true){
             throw new RuntimeException("O veiculo possui uma placa irregular");
         }
         if("".equals(veiculo.getAno())){
             throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
+        }
+        if(veiculo.getAno()<=1886 || veiculo.getAno()>=2024){
+            throw new RuntimeException("O veiculo está com um ano impossivel");
         }
         if(veiculo.getCor()==null){
             throw new RuntimeException("O veiculo não possui uma cor (deve conter!)");

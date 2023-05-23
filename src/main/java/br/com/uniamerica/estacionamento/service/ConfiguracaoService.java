@@ -24,10 +24,6 @@ public class ConfiguracaoService {
         if("".equals(configuracao.getValorHora())){
             throw new RuntimeException("ValorHora de configuração esta vazio (deve conter!)");
         }
-        /*if(configuracao.getInicioExpediente()!=null && configuracao.getFimExpediente()!=null){
-            configuracao.setInicioExpediente(LocalTime.of(6,0));
-            configuracao.setFimExpediente(LocalTime.of(20,0));
-        }*/
         this.configuracaoRepository.save(configuracao);
     }
 

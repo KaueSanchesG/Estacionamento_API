@@ -11,8 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ConfiguracaoRepository extends JpaRepository<Configuracao, Long> {
-    @Query("SELECT x FROM Configuracao x WHERE x.ativo = true")
-    List<Configuracao> findByAtivo();
     @Query("SELECT vh.valorHora FROM Configuracao vh WHERE vh.valorHora IS NOT NULL")
     BigDecimal findValorHora();
     @Query("SELECT vh.valorMinutoMulta FROM Configuracao vh WHERE vh.valorMinutoMulta IS NOT NULL")
