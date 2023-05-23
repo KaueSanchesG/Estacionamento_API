@@ -50,7 +50,7 @@ public class MovimentacaoController {
     @PutMapping
     public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try{
-            this.movimentacaoService.atuaizaMovimentacao(id, movimentacao);
+            this.movimentacaoService.atualizaMovimentacao(id, movimentacao);
         }
         catch(DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());

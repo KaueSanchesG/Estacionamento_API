@@ -5,6 +5,7 @@ import br.com.uniamerica.estacionamento.config.ValidaPlaca;
 import br.com.uniamerica.estacionamento.config.ValidaTelefone;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
+import br.com.uniamerica.estacionamento.repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.repository.ConfiguracaoRepository;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ public class MovimentacaoService {
     private ValidaCPF validaCPF;
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
+    @Autowired
+    private CondutorRepository condutorRepository;
 
     @Transactional
     public void cadastraMovimentacao(Movimentacao movimentacao){
@@ -41,15 +44,18 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        if(movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())){
-            Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
-            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+        if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), configuracaoRepository.findInicioExpediente());
             movimentacao.setTempoMulta(tempoMulta.toMinutes());
         }
-        if(movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())){
-            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
-            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-            movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
+
+        if (movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+            Duration tempoMulta = Duration.between(configuracaoRepository.findFimExpediente(), movimentacao.getSaida());
+            if (movimentacao.getTempoMulta() != null) {
+                movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
+            } else {
+                movimentacao.setTempoMulta(tempoMulta.toMinutes());
+            }
         }
         if(movimentacao.getTempoMulta()!=null){
             movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
@@ -59,12 +65,16 @@ public class MovimentacaoService {
             BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
             movimentacao.setValorTotal(valorTotal);
         }
+        /*if(condutorRepository.findTempoDesconto() != null){
+            movimentacao.setTempoDesconto(condutorRepository.findTempoDesconto());
+            movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
+        }*/
 
         this.movimentacaoRepository.save(movimentacao);
     }
 
     @Transactional
-    public void atuaizaMovimentacao(final Long id, Movimentacao movimentacao){
+    public void atualizaMovimentacao(final Long id, Movimentacao movimentacao){
         final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
         if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
             throw new RuntimeException("Não foi possivel encontrar o registro informado");
@@ -85,21 +95,35 @@ public class MovimentacaoService {
                     .minusSeconds(movimentacao.getEntrada().getSecond());
             movimentacao.setTempo(tempo);
         }
-        if (movimentacao.getEntrada()!=null && movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
-            Duration tempoMulta = Duration.between(configuracaoRepository.findInicioExpediente(), movimentacao.getEntrada());
+        if(configuracaoRepository.findValorMinutoMulta()!=null){
             movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+        }
+        if(configuracaoRepository.findValorHora()!=null){
+            movimentacao.setValorHora(configuracaoRepository.findValorHora());
+        }
+        if(condutorRepository.findTempoDesconto()!=null){
+            movimentacao.setTempoDesconto(condutorRepository.findTempoDesconto());
+        }
+        if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), configuracaoRepository.findInicioExpediente());
             movimentacao.setTempoMulta(tempoMulta.toMinutes());
         }
-        if (movimentacao.getSaida() != null && movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
-            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
-            movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
-            movimentacao.setTempoMulta(movimentacao.getTempoMulta().longValue() + tempoMulta.toMinutes());
+        if (movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+            Duration tempoMulta = Duration.between(configuracaoRepository.findFimExpediente(), movimentacao.getSaida());
+            if (movimentacao.getTempoMulta() != null) {
+                movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
+            } else {
+                movimentacao.setTempoMulta(tempoMulta.toMinutes());
+            }
         }
         if(movimentacao.getTempoMulta()!=null){
             movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
         }
-        if(movimentacao.getTempo()!=null) {
-            movimentacao.setValorHora(configuracaoRepository.findValorHora());
+        if(configuracaoRepository.findGerarDesconto()){
+            movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
+            movimentacao.getCondutor().setTempoDesconto(LocalTime.of(0, 0));
+        }
+        if(movimentacao.getTempo()!=null){
             BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
             movimentacao.setValorTotal(valorTotal);
         }

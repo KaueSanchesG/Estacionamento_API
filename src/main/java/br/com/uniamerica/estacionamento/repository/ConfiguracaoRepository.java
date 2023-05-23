@@ -19,4 +19,6 @@ public interface ConfiguracaoRepository extends JpaRepository<Configuracao, Long
     LocalTime findInicioExpediente();
     @Query("SELECT x.fimExpediente FROM Configuracao x where x.fimExpediente IS NOT NULL")
     LocalTime findFimExpediente();
+    @Query("SELECT x.gerarDesconto FROM Configuracao x where x.gerarDesconto IS NOT NULL")
+    Boolean findGerarDesconto();
 }

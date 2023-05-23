@@ -58,9 +58,7 @@ public class CondutorService {
         if(condutor.getNome().length()<3 || condutor.getNome().length() > 100){
             throw new RuntimeException("Nome de condutor está errado (de 3 a 100 caracteres!)");
         }
-        if(condutorRepository.findByCpf(condutor.getCpf())!=null){
-            throw new RuntimeException("O CPF já existe");
-        }
+
         this.condutorRepository.save(condutor);
     }
 
