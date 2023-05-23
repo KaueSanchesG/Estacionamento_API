@@ -78,9 +78,12 @@ public class ModeloController {
             this.modeloRepository.delete(modeloBanco);
         }
         catch(RuntimeException e){
-            modeloBanco.setAtivo(false);
-            this.modeloRepository.save(modeloBanco);
-            return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            if(modeloBanco.isAtivo()) {
+                modeloBanco.setAtivo(false);
+                this.modeloRepository.save(modeloBanco);
+                return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            }
+            return ResponseEntity.internalServerError().body("Erro no delete, a flag ja está desativada");
         }
         return ResponseEntity.ok("Registro deletado");
     }

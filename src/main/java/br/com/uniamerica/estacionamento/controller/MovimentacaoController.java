@@ -63,8 +63,11 @@ public class MovimentacaoController {
     @DeleteMapping
     public ResponseEntity <?> deletar(@RequestParam("id") final Long id){
         final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
-        movimentacaoBanco.setAtivo(false);
-        this.movimentacaoRepository.save(movimentacaoBanco);
-        return ResponseEntity.ok("Registro desativado");
+        if(movimentacaoBanco.isAtivo()) {
+            movimentacaoBanco.setAtivo(false);
+            this.movimentacaoRepository.save(movimentacaoBanco);
+            return ResponseEntity.ok("Registro desativado");
+        }
+        return ResponseEntity.internalServerError().body("Erro no delete, a flag ja está desativada");
     }
 }

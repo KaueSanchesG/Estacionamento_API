@@ -68,9 +68,12 @@ public class MarcaController {
             this.marcaRepository.delete(marcaBanco);
         }
         catch(RuntimeException e){
-            marcaBanco.setAtivo(false);
-            this.marcaRepository.save(marcaBanco);
-            return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            if(marcaBanco.isAtivo()) {
+                marcaBanco.setAtivo(false);
+                this.marcaRepository.save(marcaBanco);
+                return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            }
+            return ResponseEntity.internalServerError().body("Erro no delete, a flag ja está desativada");
         }
         return ResponseEntity.ok("Registro deletado");
     }

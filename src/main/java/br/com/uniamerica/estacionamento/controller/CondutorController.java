@@ -69,10 +69,13 @@ public class CondutorController {
         try{
             this.condutorRepository.delete(condutorBanco);
         }
-        catch(DataIntegrityViolationException e){
-            condutorBanco.setAtivo(false);
-            this.condutorRepository.save(condutorBanco);
-            return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+        catch(RuntimeException e){
+            if(condutorBanco.isAtivo()) {
+                condutorBanco.setAtivo(false);
+                this.condutorRepository.save(condutorBanco);
+                return ResponseEntity.internalServerError().body("Erro no delete, flag desativada!");
+            }
+            return ResponseEntity.internalServerError().body("Erro no delete, a flag ja está desativada");
         }
         return ResponseEntity.ok("Registro deletado");
     }
