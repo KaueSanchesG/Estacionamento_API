@@ -16,6 +16,9 @@ public class ModeloService {
         if(modelo.getId()!=null){
             throw new RuntimeException("O id deve ser gerado pelo banco");
         }
+        if(modelo.getMarca().getId()==null){
+            throw new RuntimeException("O id da marca está incorreto");
+        }
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
@@ -43,6 +46,10 @@ public class ModeloService {
         if(modeloRepository.findByNome(modelo.getNome())!=null){
             throw new RuntimeException("O nome ja existe");
         }
+        if(modelo.getCadastro()==null || "".equals(modelo.getCadastro())){
+            modelo.setCadastro(modeloRepository.findById(modelo.getId()).get().getCadastro());
+        }
+
         this.modeloRepository.save(modelo);
     }
 }

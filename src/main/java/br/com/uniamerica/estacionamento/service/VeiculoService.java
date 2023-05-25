@@ -24,6 +24,9 @@ public class VeiculoService {
         if("".equals(veiculo.getAno())){
             throw new RuntimeException("O veiculo não possui um ano (deve conter!)");
         }
+        if(veiculo.getAno()<=1886 || veiculo.getAno()>=2024){
+            throw new RuntimeException("O veiculo está com um ano impossivel");
+        }
         if(veiculo.getCor()==null){
             throw new RuntimeException("O veiculo não possui uma cor (deve conter!)");
         }
@@ -60,6 +63,10 @@ public class VeiculoService {
         if(veiculoRepository.findByPlaca(veiculo.getPlaca())!=null){
             throw new RuntimeException("A placa do veiculo ja existe");
         }
+        if(veiculo.getCadastro()==null || "".equals(veiculo.getCadastro())){
+            veiculo.setCadastro(veiculoRepository.findById(veiculo.getId()).get().getCadastro());
+        }
+
         this.veiculoRepository.save(veiculo);
     }
 }

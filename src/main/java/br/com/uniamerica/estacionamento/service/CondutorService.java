@@ -58,6 +58,9 @@ public class CondutorService {
         if(condutor.getNome().length()<3 || condutor.getNome().length() > 100){
             throw new RuntimeException("Nome de condutor está errado (de 3 a 100 caracteres!)");
         }
+        if(condutor.getCadastro()==null || "".equals(condutor.getCadastro())){
+            condutor.setCadastro(condutorRepository.findById(condutor.getId()).get().getCadastro());
+        }
 
         this.condutorRepository.save(condutor);
     }

@@ -39,6 +39,10 @@ public class ConfiguracaoService {
         if("".equals(configuracao.getValorHora())){
             throw new RuntimeException("ValorHora de configuração esta vazio (deve conter!)");
         }
+        if(configuracao.getCadastro()==null || "".equals(configuracao.getCadastro())){
+            configuracao.setCadastro(configuracaoRepository.findById(configuracao.getId()).get().getCadastro());
+        }
+
         this.configuracaoRepository.save(configuracao);
     }
 }

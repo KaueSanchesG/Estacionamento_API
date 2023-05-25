@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.config.Recibo;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.service.MovimentacaoService;
@@ -58,7 +59,7 @@ public class MovimentacaoController {
         catch(RuntimeException e){
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
-        return ResponseEntity.ok("Registro atualizado com sucesso");
+        return ResponseEntity.ok(Recibo.gerar(movimentacao.getEntrada(), movimentacao.getSaida(), movimentacaoRepository.findById(movimentacao.getId()).get().getCondutor().getNome(), movimentacaoRepository.findById(movimentacao.getId()).get().getVeiculo().getPlaca(), movimentacao.getTempo(), movimentacao.getTempoMulta(), movimentacao.getTempoDesconto(), movimentacao.getValorTotal()));
     }
     @DeleteMapping
     public ResponseEntity <?> deletar(@RequestParam("id") final Long id){

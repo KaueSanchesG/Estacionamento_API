@@ -34,41 +34,64 @@ public class MovimentacaoService {
         if(movimentacao.getId()!=null){
             throw new RuntimeException("O id deve ser gerado pelo banco");
         }
+        if(movimentacao.getVeiculo()==null){
+            throw new RuntimeException("O id de veiculo está incorreto");
+        }
+        if(movimentacao.getCondutor()==null) {
+            throw new RuntimeException("O id de condutor está incoreto");
+        }
         if("".equals(movimentacao.getEntrada())){
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
         }
-        if(movimentacao.getSaida() != null){
-            LocalTime tempo = movimentacao.getSaida()
-                    .minusHours(movimentacao.getEntrada().getHour())
-                    .minusMinutes(movimentacao.getEntrada().getMinute())
-                    .minusSeconds(movimentacao.getEntrada().getSecond());
-            movimentacao.setTempo(tempo);
-        }
-        if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
-            Duration tempoMulta = Duration.between(movimentacao.getEntrada(), configuracaoRepository.findInicioExpediente());
-            movimentacao.setTempoMulta(tempoMulta.toMinutes());
-        }
-
-        if (movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
-            Duration tempoMulta = Duration.between(configuracaoRepository.findFimExpediente(), movimentacao.getSaida());
-            if (movimentacao.getTempoMulta() != null) {
-                movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
-            } else {
+        if(movimentacao.getSaida()!=null) {
+            movimentacao.setValorMulta(BigDecimal.ZERO);
+            movimentacao.setValorDesconto(BigDecimal.ZERO);
+            if (movimentacao.getSaida() != null) {
+                LocalTime tempo = movimentacao.getSaida()
+                        .minusHours(movimentacao.getEntrada().getHour())
+                        .minusMinutes(movimentacao.getEntrada().getMinute())
+                        .minusSeconds(movimentacao.getEntrada().getSecond());
+                movimentacao.setTempo(tempo);
+            }
+            if (configuracaoRepository.findValorMinutoMulta() != null) {
+                movimentacao.setValorMinutoMulta(configuracaoRepository.findValorMinutoMulta());
+            }
+            if (configuracaoRepository.findValorHora() != null) {
+                movimentacao.setValorHora(configuracaoRepository.findValorHora());
+            }
+            if (condutorRepository.findTempoDesconto() != null) {
+                movimentacao.setTempoDesconto(condutorRepository.findTempoDesconto());
+            }
+            if (movimentacao.getEntrada().isBefore(configuracaoRepository.findInicioExpediente())) {
+                Duration tempoMulta = Duration.between(movimentacao.getEntrada(), configuracaoRepository.findInicioExpediente());
                 movimentacao.setTempoMulta(tempoMulta.toMinutes());
             }
+            if (movimentacao.getSaida().isAfter(configuracaoRepository.findFimExpediente())) {
+                Duration tempoMulta = Duration.between(configuracaoRepository.findFimExpediente(), movimentacao.getSaida());
+                if (movimentacao.getTempoMulta() != null) {
+                    movimentacao.setTempoMulta(movimentacao.getTempoMulta() + tempoMulta.toMinutes());
+                } else {
+                    movimentacao.setTempoMulta(tempoMulta.toMinutes());
+                }
+            }
+            if (movimentacao.getTempoMulta() != null) {
+                movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
+            }
+            if (configuracaoRepository.findGerarDesconto()) {
+                movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
+                condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoDesconto(LocalTime.of(0, 0));
+            }
+            if(movimentacao.getTempo()!=null){
+                BigDecimal valorTotal;
+                if(movimentacao.getTempo().getMinute()!=0){
+                    LocalTime tempoNovo = movimentacao.getTempo().plusHours(1);
+                    valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(tempoNovo.getHour()));
+                }else{
+                    valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+                }
+                movimentacao.setValorTotal(movimentacao.getValorMulta().add(valorTotal.subtract(movimentacao.getValorDesconto())));
+            }
         }
-        if(movimentacao.getTempoMulta()!=null){
-            movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
-        }
-        if(movimentacao.getTempo()!=null) {
-            movimentacao.setValorHora(configuracaoRepository.findValorHora());
-            BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
-            movimentacao.setValorTotal(valorTotal);
-        }
-        /*if(condutorRepository.findTempoDesconto() != null){
-            movimentacao.setTempoDesconto(condutorRepository.findTempoDesconto());
-            movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
-        }*/
 
         this.movimentacaoRepository.save(movimentacao);
     }
@@ -85,9 +108,14 @@ public class MovimentacaoService {
         if(movimentacao.getCondutor()==null){
             throw new RuntimeException("O id de condutor está incoreto");
         }
+        if(movimentacao.getCadastro()==null || "".equals(movimentacao.getCadastro())){
+            movimentacao.setCadastro(movimentacaoRepository.findById(movimentacao.getId()).get().getCadastro());
+        }
         if("".equals(movimentacao.getEntrada())){
             throw new RuntimeException("A movimentação não possui uma entrada (deve conter!)");
         }
+        movimentacao.setValorMulta(BigDecimal.ZERO);
+        movimentacao.setValorDesconto(BigDecimal.ZERO);
         if(movimentacao.getSaida() != null){
             LocalTime tempo = movimentacao.getSaida()
                     .minusHours(movimentacao.getEntrada().getHour())
@@ -121,11 +149,17 @@ public class MovimentacaoService {
         }
         if(configuracaoRepository.findGerarDesconto()){
             movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
-            movimentacao.getCondutor().setTempoDesconto(LocalTime.of(0, 0));
+            condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoDesconto(LocalTime.of(0, 0));
         }
         if(movimentacao.getTempo()!=null){
-            BigDecimal valorTotal = configuracaoRepository.findValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
-            movimentacao.setValorTotal(valorTotal);
+            BigDecimal valorTotal;
+            if(movimentacao.getTempo().getMinute()!=0){
+                LocalTime tempoNovo = movimentacao.getTempo().plusHours(1);
+                valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(tempoNovo.getHour()));
+            }else{
+                valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
+            }
+            movimentacao.setValorTotal(movimentacao.getValorMulta().add(valorTotal.subtract(movimentacao.getValorDesconto())));
         }
 
         this.movimentacaoRepository.save(movimentacao);

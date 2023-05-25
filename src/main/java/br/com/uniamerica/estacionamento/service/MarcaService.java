@@ -43,6 +43,10 @@ public class MarcaService {
         if(marcaRepository.findByNome(marca.getNome())!=null){
             throw new RuntimeException("O nome já existe");
         }
+        if(marca.getCadastro()==null || "".equals(marca.getCadastro())){
+            marca.setCadastro(marcaRepository.findById(marca.getId()).get().getCadastro());
+        }
+
         this.marcaRepository.save(marca);
     }
 }
