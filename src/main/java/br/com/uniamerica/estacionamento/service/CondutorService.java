@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+
 @Service
 public class CondutorService {
     @Autowired
@@ -37,6 +39,9 @@ public class CondutorService {
         if(condutorRepository.findByCpf(condutor.getCpf())!=null){
             throw new RuntimeException("O CPF já existe");
         }
+        condutor.setTempoPago(LocalTime.of(0, 0, 0));
+        condutor.setTempoDesconto(LocalTime.of(0, 0, 0));
+
         this.condutorRepository.save(condutor);
     }
 

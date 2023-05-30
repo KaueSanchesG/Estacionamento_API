@@ -3,6 +3,7 @@ package br.com.uniamerica.estacionamento.service;
 import br.com.uniamerica.estacionamento.config.ValidaCPF;
 import br.com.uniamerica.estacionamento.config.ValidaPlaca;
 import br.com.uniamerica.estacionamento.config.ValidaTelefone;
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
@@ -77,10 +78,10 @@ public class MovimentacaoService {
             if (movimentacao.getTempoMulta() != null) {
                 movimentacao.setValorMulta(movimentacao.getValorMinutoMulta().multiply(BigDecimal.valueOf(movimentacao.getTempoMulta())));
             }
-            if (configuracaoRepository.findGerarDesconto()) {
-                movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
-                condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoDesconto(LocalTime.of(0, 0));
-            }
+                if (configuracaoRepository.findGerarDesconto()) {
+                    movimentacao.setValorDesconto(movimentacao.getValorHora().multiply(BigDecimal.valueOf(movimentacao.getTempoDesconto().getHour())));
+                    condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoDesconto(LocalTime.of(0, 0));
+                }
             if(movimentacao.getTempo()!=null){
                 BigDecimal valorTotal;
                 if(movimentacao.getTempo().getMinute()!=0){
@@ -90,6 +91,9 @@ public class MovimentacaoService {
                     valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
                 }
                 movimentacao.setValorTotal(movimentacao.getValorMulta().add(valorTotal.subtract(movimentacao.getValorDesconto())));
+            }
+            if (movimentacao.getTempoDesconto()!=null){
+                condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoPago(condutorRepository.findById(movimentacao.getCondutor().getId()).get().getTempoPago().plusHours(movimentacao.getTempo().getHour()).plusMinutes(movimentacao.getTempo().getMinute()));
             }
         }
 
@@ -160,6 +164,9 @@ public class MovimentacaoService {
                 valorTotal = movimentacao.getValorHora().multiply(new BigDecimal(movimentacao.getTempo().getHour()));
             }
             movimentacao.setValorTotal(movimentacao.getValorMulta().add(valorTotal.subtract(movimentacao.getValorDesconto())));
+        }
+        if (movimentacao.getTempoDesconto()!=null){
+            condutorRepository.findById(movimentacao.getCondutor().getId()).get().setTempoPago(condutorRepository.findById(movimentacao.getCondutor().getId()).get().getTempoPago().plusHours(movimentacao.getTempo().getHour()).plusMinutes(movimentacao.getTempo().getMinute()));
         }
 
         this.movimentacaoRepository.save(movimentacao);

@@ -45,7 +45,7 @@ public class MovimentacaoController {
         catch(Exception e){
             return ResponseEntity.badRequest().body("Error " + e.getMessage());
         }
-        return ResponseEntity.ok("Registro cadastrado com sucesso");
+        return ResponseEntity.ok(Recibo.gerar(movimentacao.getEntrada(), movimentacao.getSaida(), movimentacaoRepository.findById(movimentacao.getId()).get().getCondutor().getNome(), movimentacaoRepository.findById(movimentacao.getId()).get().getVeiculo().getPlaca(), movimentacao.getTempo(), movimentacao.getTempoMulta(), movimentacao.getTempoDesconto(), movimentacao.getValorTotal()));
     }
 
     @PutMapping
