@@ -48,8 +48,8 @@ public class MovimentacaoController {
         return ResponseEntity.ok(Recibo.gerar(movimentacao.getEntrada(), movimentacao.getSaida(), movimentacaoRepository.findById(movimentacao.getId()).get().getCondutor().getNome(), movimentacaoRepository.findById(movimentacao.getId()).get().getVeiculo().getPlaca(), movimentacao.getTempo(), movimentacao.getTempoMulta(), movimentacao.getTempoDesconto(), movimentacao.getValorTotal()));
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try{
             this.movimentacaoService.atualizaMovimentacao(id, movimentacao);
         }

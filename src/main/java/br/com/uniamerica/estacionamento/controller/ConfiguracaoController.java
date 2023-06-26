@@ -42,8 +42,8 @@ public class ConfiguracaoController {
         return ResponseEntity.ok("Registro cadastrado com sucesso");
     }
     
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") Long id, @RequestBody Configuracao configuracao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") Long id, @RequestBody Configuracao configuracao){
         try {
             this.configuracaoService.atualizaConfiguracao(id, configuracao);
         }

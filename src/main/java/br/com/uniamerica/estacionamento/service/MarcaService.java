@@ -40,11 +40,11 @@ public class MarcaService {
         if(marca.getNome().length()<3 || marca.getNome().length() > 50){
             throw new RuntimeException("Nome da marca está incorreto (de 3 a 50 caracteres!)");
         }
-        if(marcaRepository.findByNome(marca.getNome())!=null){
-            throw new RuntimeException("O nome já existe");
-        }
         if(marca.getCadastro()==null || "".equals(marca.getCadastro())){
             marca.setCadastro(marcaRepository.findById(marca.getId()).get().getCadastro());
+        }
+        if("".equals(marca.getNome())){
+            marca.setNome(marcaRepository.findById(marca.getId()).get().getNome());
         }
 
         this.marcaRepository.save(marca);

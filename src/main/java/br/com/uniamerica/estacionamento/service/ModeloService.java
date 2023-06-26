@@ -22,7 +22,7 @@ public class ModeloService {
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
-        if(modelo.getNome().length()<4 || modelo.getNome().length()>50){
+        if(modelo.getNome().length()<3 || modelo.getNome().length()>50){
             throw new RuntimeException("Nome de modelo excedeu o limite (entre 4 á 50 caracteres!)");
         }
         if(modeloRepository.findByNome(modelo.getNome())!=null){
@@ -40,7 +40,7 @@ public class ModeloService {
         if("".equals(modelo.getNome())){
             throw new RuntimeException("O modelo não possui um nome (deve conter!)");
         }
-        if(modelo.getNome().length()<4 || modelo.getNome().length()>50){
+        if(modelo.getNome().length()<3 || modelo.getNome().length()>50){
             throw new RuntimeException("Nome de modelo excedeu o limite (entre 4 á 50 caracteres!)");
         }
         if(modeloRepository.findByNome(modelo.getNome())!=null){
