@@ -30,6 +30,10 @@ public class ConfiguracaoController {
         final Configuracao configuracao = this.configuracaoRepository.findById(id).orElse(null);
         return configuracao==null ? ResponseEntity.badRequest().body("Nenhum valor encontrado") : ResponseEntity.ok(configuracao);
     }
+    @GetMapping("/lista")
+    public ResponseEntity<?> listaCompleta(){
+        return ResponseEntity.ok(this.configuracaoRepository.findAll());
+    }
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Configuracao configuracao){

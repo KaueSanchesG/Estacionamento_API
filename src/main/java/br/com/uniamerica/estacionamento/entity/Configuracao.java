@@ -7,10 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalTime;
 @Entity
 @Audited
