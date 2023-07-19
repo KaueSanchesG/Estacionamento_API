@@ -1,51 +1,42 @@
-# Estacionamento
+# Estacionamento API 🚀
 
-Um projeto do 3° periodo de eng. de sotftware da faculdade Uniamerica, onde desenvolvemos uma API em Spring Boot
-## Descrição
+## About 📘
 
-O projeto consiste em um sistema de estacionamento que permite cadastrar e atualizar informações de Movimentações. Ele utiliza a arquitetura de serviço (Service) para implementar as funcionalidades relacionadas as regras de negocio.
+![Gif-1](https://github.com/KaueSanchesG/Desafio-api/assets/95658722/b13f1d83-2b8c-4757-bd82-54846d462370)
 
-## Funcionalidades
+This project is separated in 2 parts, the [front end](https://github.com/KaueSanchesG/estacionamento_client) and the back end (this repo), in resume it's a parking lot application made with spring boot in the back and Vue.js in as the front framework. The main goal were to make it an API Rest so the client could inject data in it and extract in the same way.
 
-### Cadastrar Movimentação
+## Status ✅
 
-A classe `MovimentacaoService` contém o método `cadastraMovimentacao` que permite cadastrar um novo veículo no sistema de estacionamento. Antes de salvar o veículo, são realizadas as seguintes validações:
+This project has been completed but it surely have to be improved, I'll do a list of upgradable itens right below:
 
-- Verifica se o Id está sendo gerado pelo banco
-- Verifica se existe um id de veiculo
-- Verifica se existe um id de condutor
-- Verifica se existe uma entrada
-- Verifica se existe uma saida
-- Verifica se houve entrada e saida depois ou antes do expediente
-- Gera multas se houver um tempoMulta
-- Gera um valor total baseado na somatoria e diminuição de descontos
+* Implement the @Validate annotation instead of using if conditions in easy validations
+* Add the Delete methods to the service and clean the controllers
+* Apply clean code in the service package, I know it is a little messy lmao
+* Re-do the config package in the right way
+* Review the repository package
 
-### Atualizar Movimentação
+## How to use 📋
 
-A classe `VeiculoService` também possui o método `atualizaVeiculo` que permite atualizar as informações de um veículo existente. Antes de realizar a atualização, são feitas as seguintes verificações:
+As said earlier, this project is divided in 2 parts so if you want to see it 100% working you need to check the [estacionamento_client](https://github.com/KaueSanchesG/estacionamento_client) repo, or you can just run the backend and test the endpoints with postman (it's cooler when working 100% so you can see it in your browser).
+For running the back end, you'll need a Java IDE and a database to run. I'm using **[IntelliJ](https://www.jetbrains.com/idea/)** as the IDE and **[PostgreSQL](https://www.postgresql.org/)** as the database (you'll need to open pgAdmin4 and create a database called "estacionamento" and a schema called "estacionamento" inside the "estacionamento" database, you'll also need a audit schema for the @Audited annotation).
 
-- Verifica se o Id está sendo gerado pelo banco
-- Verifica se existe um id de veiculo
-- Verifica se existe um id de condutor
-- Verifica se existe uma entrada
-- Verifica se existe uma saida
-- Verifica se houve entrada e saida depois ou antes do expediente
-- Gera multas se houver um tempoMulta
-- Gera um valor total baseado na somatoria e diminuição de descontos
+Next, follow this code sequence in your local directory:
 
-### Iniciar a aplicação
+```bash
+# Clone the repository
+git clone https://github.com/KaueSanchesG/Estacionamento_API.git
 
-O arquivo `EstacionamentoApplication` é responsável por iniciar a aplicação Spring Boot. Ao executar o método `main`, a aplicação é inicializada e fica pronta para receber requisições e fornecer os serviços relacionados ao estacionamento.
+# Open the IDE by typing
+idea
+After that, navigate to the directory where you've cloned the project and open it.
+```
 
-## Executando a aplicação
+To run the project, open **src/java/br.com.uniamerica.estacionamento/EstacionamentoApplication** file and click the run button or use the shortcut Shift+F10.
+## Technologies 🛠️
 
-Para executar a aplicação, siga os passos abaixo:
-
-1. Certifique-se de ter o Java instalado na versão adequada.
-2. Execute o método `main` na classe `EstacionamentoApplication`.
-3. A aplicação será iniciada e estará pronta para uso.
-
-## Tecnologias utilizadas
-
-- Java
-- Spring Boot
+|      Technology      | Version |
+|:--------------------:|:-------:|
+| SpringFramework Boot |  3.0.4  |
+|         Java         |   19    |
+|       Hibernate      |  6.1.7  |
