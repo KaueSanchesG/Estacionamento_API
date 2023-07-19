@@ -28,7 +28,7 @@ git clone https://github.com/KaueSanchesG/Estacionamento_API.git
 
 # Open the IDE by typing
 idea
-After that, navigate to the directory where you've cloned the project and open it.
+# After that, navigate to the directory where you've cloned the project and open it.
 ```
 
 To run the project, open **src/java/br.com.uniamerica.estacionamento/EstacionamentoApplication** file and click the run button or use the shortcut Shift+F10.
