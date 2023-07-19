@@ -2,24 +2,23 @@
 
 ## About 📘
 
-![Gif-1](https://github.com/KaueSanchesG/Desafio-api/assets/95658722/b13f1d83-2b8c-4757-bd82-54846d462370)
+![Gif-2](https://github.com/KaueSanchesG/Estacionamento_API/assets/95658722/2b19e31f-a88e-4cac-ada8-896a2385b453)
 
-This project is separated in 2 parts, the [front end](https://github.com/KaueSanchesG/estacionamento_client) and the back end (this repo), in resume it's a parking lot application made with spring boot in the back and Vue.js in as the front framework. The main goal were to make it an API Rest so the client could inject data in it and extract in the same way.
+This project is divided into 2 parts: the [front end](https://github.com/KaueSanchesG/estacionamento_client) and the back end (this repository). In short, it's a parking lot application made with Spring Boot in the back end and Vue.js as the front-end framework. The main goal was to create a REST API so the client could interact with it and extract data in the same way.
 
 ## Status ✅
 
-This project has been completed but it surely have to be improved, I'll do a list of upgradable itens right below:
+This project has been completed, but there is still room for improvement. Below is a list of upgradable items:
 
-* Implement the @Validate annotation instead of using if conditions in easy validations
-* Add the Delete methods to the service and clean the controllers
-* Apply clean code in the service package, I know it is a little messy lmao
-* Re-do the config package in the right way
-* Review the repository package
+* Implement the `@Validate` annotation instead of using `if` conditions for easy validations.
+* Add the Delete methods to the service and clean up the controllers.
+* Apply clean code principles to the service package; I know it is a little messy, lmao.
+* Re-do the config package in the right way.
+* Review the repository package.
 
 ## How to use 📋
 
-As said earlier, this project is divided in 2 parts so if you want to see it 100% working you need to check the [estacionamento_client](https://github.com/KaueSanchesG/estacionamento_client) repo, or you can just run the backend and test the endpoints with postman (it's cooler when working 100% so you can see it in your browser).
-For running the back end, you'll need a Java IDE and a database to run. I'm using **[IntelliJ](https://www.jetbrains.com/idea/)** as the IDE and **[PostgreSQL](https://www.postgresql.org/)** as the database (you'll need to open pgAdmin4 and create a database called "estacionamento" and a schema called "estacionamento" inside the "estacionamento" database, you'll also need a audit schema for the @Audited annotation).
+As mentioned earlier, this project is divided into 2 parts. If you want to see it 100% working, you need to check the [estacionamento_client](https://github.com/KaueSanchesG/estacionamento_client) repository. Alternatively, you can just run the backend and test the endpoints with Postman (it's cooler when working 100% so you can see it in your browser). For running the back end, you'll need a Java IDE and a database to run. I'm using **[IntelliJ](https://www.jetbrains.com/idea/)** as the IDE and **[PostgreSQL](https://www.postgresql.org/)** as the database (you'll need to open pgAdmin4 and create a database called "estacionamento" and a schema called "estacionamento" inside the "estacionamento" database, you'll also need an audit schema for the `@Audited` annotation). Next, follow this code sequence in your local directory:
 
 Next, follow this code sequence in your local directory:
 
